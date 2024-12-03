@@ -27,7 +27,7 @@ pip install numpy opencv-python torch ultralytics pyserial scikit-learn
 ```
 
 ## Systemarchitektur
-
+Sie Benötigen dringend ein Linux basierendes System wegen dem Frabebuffer! fb0 muss FullHD sein!
 ### Modulübersicht
 
 1. **Detektionsmodul (`JVN_V6detection_module.py`)**

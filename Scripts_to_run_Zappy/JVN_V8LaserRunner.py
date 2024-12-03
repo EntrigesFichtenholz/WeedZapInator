@@ -6,7 +6,7 @@ import time
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 from JVN_V4LaserTx import lasercommander, LaserPlotterTx
-from JVN_V5detection_module import laseranalyst
+from JVN_V6detection_module import laseranalyst
 from JVN_V2patternizer import CirclePatternizer, SpiralPatternizer, GridPatternizer, RandomPatternizer
 
 #Niedriger eps ist ungenauer
@@ -171,8 +171,8 @@ def main():
             current_x, current_y = position_queue.get()
 
             #Current pos in mm aber object pos in cm
-            new_x_coord_command = round((x_coord_object*10 - current_x -80), 2) #-80 wegen Laserofsett
-            new_y_coord_command = round((y_coord_object*10 - current_y +15), 2)
+            new_x_coord_command = round((x_coord_object*10 - current_x-80), 2) #Laserofsett -80
+            new_y_coord_command = round((y_coord_object*10 - current_y), 2)
             print(f"x_coord_object{x_coord_object*10}-current_x{current_x}")
             try:
                command = str(f"G91 X{new_x_coord_command} Y{new_y_coord_command} F0")

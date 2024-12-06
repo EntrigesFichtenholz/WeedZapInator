@@ -1,0 +1,12 @@
+names:
+  0: HumanLimb
+  1: Insekt
+  2: KeinUnkraut
+  3: blatt
+  4: loewenzahn
+  5: loewenzahn_Bluete
+  6: loewenzahn_Staengel
+path: /home/johannes/programme/Ai/LASERUNKRAUTVERNCHTER/Images/yolo_dataset
+train: train
+val: validate
+

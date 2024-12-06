@@ -1,0 +1,8 @@
+nc: 3  # Anzahl der Klassen
+names:
+  0: Kreis
+  1: Rechteck
+  2: Dreieck
+path: /home/johannes/programme/Ai/LASERUNKRAUTVERNCHTER/Images/Shape-Detection-with-YOLO/output_images/
+train: train
+val: validate

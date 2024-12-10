@@ -1,7 +1,7 @@
 # WeedZapInator (Zappi) - Autonomes Unkraut-Erkennungs- und Eliminationssystem
 
 ## Projektübersicht
-Der WeedZapInator ist ein innovatives robotisches System, das darauf ausgelegt ist, Unkraut autonom zu erkennen und mit Lasertechnologie zu beseitigen. Das Ziel ist eine umweltfreundliche und effiziente Alternative zu herkömmlichen Unkrautbekämpfungsmethoden.
+Der WeedZapInator ist ein System, das darauf ausgelegt ist, Unkraut autonom zu erkennen und mit Lasertechnologie zu beseitigen. Das Ziel ist eine umweltfreundliche und effiziente Alternative zu herkömmlichen Unkrautbekämpfungsmethoden.
 
 ## Benötigte Python-Bibliotheken
 

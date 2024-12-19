@@ -9,6 +9,7 @@ from JVN_V4LaserTx import lasercommander, LaserPlotterTx
 from JVN_V6detection_module import laseranalyst
 from JVN_V2patternizer import CirclePatternizer, SpiralPatternizer, GridPatternizer, RandomPatternizer
 from math import sqrt
+import keyboard
 
 def cluster_objects(found_objects, eps=0.5, min_samples=2):
     """
@@ -134,7 +135,7 @@ def main():
 
     try:
         if enable_clustering:
-            median_tuples, labels = cluster_objects(found_objects, eps=0.5, min_samples=2)
+            median_tuples, labels = cluster_objects(found_objects, eps=0.1, min_samples=2)
             objects_to_process = median_tuples
         else:
             objects_to_process = found_objects
@@ -149,7 +150,7 @@ def main():
             command_queue.put("pos")
             current_x, current_y = position_queue.get()
 
-            new_x = round((x_mm - current_x - 80), 2)
+            new_x = round((x_mm - current_x), 2)
             new_y = round((y_mm - current_y), 2)
             print(f"Command: X={new_x}, Y={new_y}")
 

@@ -75,6 +75,17 @@ Sie Benötigen dringend ein Linux basierendes System wegen dem Frabebuffer! fb0 
 - `settings.txt`: Skalierungskalibrierung
 - Anpassbare Parameter in Detektions- und Plotter-Modulen
 - Konfigurations-Optionen für Mustergenerierung
+   """Das folgende ist ein Audiotranskript, welches ich auch ins Github schreibe:
+   
+   In diesem Abschnitt erläutere ich, wie der Laserplotter zu kalibrieren ist.
+   Der Prozess basiert im Wesentlichen auf zwei Skriptdateien, die zum Einsatz kommen: „laserTX“ in der Version 4.
+   In dieser Datei finden Sie am unteren Ende Parameter, mit denen Sie den Raum anpassen können, den der Laser nach dem „Homing“ einnimmt.
+   
+   Um zu überprüfen, ob alle Einstellungen korrekt sind, können Sie ein kleines Rechteck nahe dem Koordinatenursprung testen. Sobald dies stimmig ist, verschieben Sie bitte Ihre Kalibrierkarte zum dritten Viereck/Rechteck am Ende des Koordinatenursprungs. Nun können Sie den Maßstab für die X- und Y-Achse anpassen.
+   
+   Dabei ist zu beachten, dass die X-Achse auf dem Bildschirm horizontal und die Y-Achse vertikal verläuft, während es beim Plotter umgekehrt ist. Das Programm berücksichtigt dies und tauscht die Achsen entsprechend um. Ich belasse diese Einstellung derzeit so, da sie das Plotterbild präzise abbildet.
+   
+   Zur besseren Verständlichkeit werde ich Kommentare im Code hinzufügen. Geplant ist ohnehin, den Code detaillierter zu dokumentieren. Der Kalibrierungsvorgang erfordert mehrfaches Wechseln zwischen der Einstellung des Offsets und des Maßstabs. Diesen Prozess wiederholen Sie bitte dreimal für jede Achse, um die Kalibrierung abzuschließen."""
 
 ## Hardwareanforderungen
 - USB-Verbindung zum Laser-Plotter

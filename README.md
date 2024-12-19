@@ -79,7 +79,7 @@ Sie Benötigen dringend ein Linux basierendes System wegen dem Frabebuffer! fb0 
    
    In diesem Abschnitt erläutere ich, wie der Laserplotter zu kalibrieren ist.
    Der Prozess basiert im Wesentlichen auf zwei Skriptdateien, die zum Einsatz kommen: „laserTX“ in der Version 4.
-   In dieser Datei finden Sie am unteren Ende Parameter, mit denen Sie den Raum anpassen können, den der Laser nach dem „Homing“ einnimmt.
+   In dieser Datei finden Sie am unteren Ende Parameter, mit denen Sie den Raum anpassen können, den der Laser nach dem „Homing“ einnimmt. Und die Skalierung der X;Y Achse in der Datei:JVN_V6detection_module.py
    
    Um zu überprüfen, ob alle Einstellungen korrekt sind, können Sie ein kleines Rechteck nahe dem Koordinatenursprung testen. Sobald dies stimmig ist, verschieben Sie bitte Ihre Kalibrierkarte zum dritten Viereck/Rechteck am Ende des Koordinatenursprungs. Nun können Sie den Maßstab für die X- und Y-Achse anpassen.
    

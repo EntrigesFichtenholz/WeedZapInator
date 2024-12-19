@@ -6,7 +6,7 @@ from enum import Enum
 
 # Maschinenparameter
 maschinengrenze_x = 370
-maschinengrenze_y = 300
+maschinengrenze_y = 350
 
 
 class CoordinateMode(Enum):
@@ -151,8 +151,8 @@ class LaserPlotterTx:
 
             self.send_gcode("G90", privileged=True)  # Zurück in absoluten Modus
 
-            self.status.current_x = 0
-            self.status.current_y = 0
+            self.status.current_x = 100 # Machste Hier den Ofsett rein für die düse lmao
+            self.status.current_y = 65
             self.status.is_homed = True
             return True
         except Exception as e:

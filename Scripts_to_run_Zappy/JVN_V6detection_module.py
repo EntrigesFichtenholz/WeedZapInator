@@ -20,7 +20,7 @@ def load_settings():
     if os.path.exists(SETTINGS_FILE):
         with open(SETTINGS_FILE, "r") as file:
             return json.load(file)
-    return {"scale_x": 36.10, "scale_y": 36.10}  # Default values
+    return {"scale_x": 34.08, "scale_y": 24.00}  # Default values
 
 def save_settings(settings):
     with open(SETTINGS_FILE, "w") as file:
@@ -140,8 +140,8 @@ def laseranalyst():
     scale_x = settings["scale_x"]
     scale_y = settings["scale_y"]
 
-    cap = cv2.VideoCapture(0)
-    detector = YOLO("./savemodels/LightPlantViewer_20241109_224033.pt")
+    cap = cv2.VideoCapture("/dev/video0")
+    detector = YOLO("./savemodels/MultiRes302ZyklenModel_20241215_024611_20241215_043825.pt")
     framebuffer = OptimizedFramebuffer()
 
     prev_time = time.time()

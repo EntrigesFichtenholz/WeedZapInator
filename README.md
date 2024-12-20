@@ -81,7 +81,10 @@ pip install numpy opencv-python torch ultralytics pyserial scikit-learn
 - `settings.txt`: Skalierungskalibrierung
 - Anpassbare Parameter in Detektions- und Plotter-Modulen
 - Konfigurations-Optionen für Mustergenerierung
-   """Das folgende ist ein Audiotranskript, welches ich auch ins Github schreibe:
+  (Noch nicht richtig Imprlementiert bzw. Teilweise verbuggt)
+
+
+  """Das folgende ist ein Audiotranskript, welches ich auch ins Github schreibe:
    
    In diesem Abschnitt erläutere ich, wie der Laserplotter zu kalibrieren ist.
    Der Prozess basiert im Wesentlichen auf zwei Skriptdateien, die zum Einsatz kommen: „laserTX“ in der Version 4 und V6detection

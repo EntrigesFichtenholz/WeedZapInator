@@ -20,7 +20,8 @@ Der WeedZapInator ist ein System, das darauf ausgelegt ist, Unkraut autonom zu e
 - `json`: Konfigurationsspeicherung
 - `dataclasses`: Datenklassen
 - `enum`: Aufzählungstypen
-
+- `math`: Mathematische Operationen
+  
 ### Installation
 ```bash
 pip install numpy opencv-python torch ultralytics pyserial scikit-learn

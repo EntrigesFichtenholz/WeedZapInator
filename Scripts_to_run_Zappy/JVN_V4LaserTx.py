@@ -2,24 +2,16 @@ import serial
 import time
 from dataclasses import dataclass
 from typing import Optional, List
-from enum import Enum
 
 # Maschinenparameter
 maschinengrenze_x = 370
 maschinengrenze_y = 350
-
-
-class CoordinateMode(Enum):
-    ABSOLUTE = "G90"
-    RELATIVE = "G91"
-
 
 @dataclass
 class Movement:
     x: Optional[float] = None
     y: Optional[float] = None
     is_relative: bool = False
-
 
 @dataclass
 class PlotterStatus:
@@ -28,11 +20,10 @@ class PlotterStatus:
     current_y: float = 0.0
     max_x: float = maschinengrenze_x
     max_y: float = maschinengrenze_y
-    coordinate_mode: CoordinateMode = CoordinateMode.ABSOLUTE
-
+    is_relative_mode: bool = True  # True: RELATIVE, False: ABSOLUTE
 
 class LaserPlotterTx:
-    def __init__(self, port='/dev/ttyUSB0', baudrate=115200):
+    def __init__(self, port='/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0', baudrate=115200):
         self.port = port
         self.baudrate = baudrate
         self.status = PlotterStatus()
@@ -48,19 +39,20 @@ class LaserPlotterTx:
             print(f"Verbindungsfehler: {e}")
             return False
 
+    def set_mode(self, is_relative: bool):
+        """
+        Setzt den Modus explizit auf RELATIV oder ABSOLUT.
+        :param is_relative: True für RELATIV, False für ABSOLUT.
+        """
+        self.status.is_relative_mode = is_relative
+        mode = "RELATIVE" if is_relative else "ABSOLUTE"
+        print(f"Koordinatenmodus auf {mode} gesetzt.")
+
     def parse_movement(self, command: str, privileged: bool = False) -> Optional[Movement]:
         parts = command.upper().split()
         x_move = None
         y_move = None
-        is_relative = self.status.coordinate_mode == CoordinateMode.RELATIVE
-
-        # Prüfe Koordinatenmodus
-        if "G90" in parts:
-            self.status.coordinate_mode = CoordinateMode.ABSOLUTE
-            is_relative = False
-        elif "G91" in parts:
-            self.status.coordinate_mode = CoordinateMode.RELATIVE
-            is_relative = True
+        is_relative = self.status.is_relative_mode
 
         # Extrahiere Bewegungsbefehle
         for part in parts:
@@ -88,8 +80,7 @@ class LaserPlotterTx:
 
     def update_position(self, movement: Movement):
         """
-        Aktualisiert die Position basierend auf der Bewegung und dem aktuellen Koordinatenmodus.
-        Berücksichtigt den in der Bewegung gespeicherten Modus (relativ/absolut).
+        Aktualisiert die Position basierend auf der Bewegung und dem aktuellen Modus (relativ/absolut).
         """
         if movement.is_relative:  # Relative Bewegung
             if movement.x is not None:
@@ -118,7 +109,7 @@ class LaserPlotterTx:
         if movement is None:
             return "Befehl abgelehnt: Bewegung außerhalb der Grenzen." if not privileged else "Fehler bei privilegiertem Befehl."
 
-        # Wenn Bewegung gültig ist, sende den Befehl
+        # Sende den G-Code-Befehl direkt
         print(f"Sende: {command}")
         self.ser.write(f"{command}\n".encode())
         time.sleep(0.1)
@@ -133,15 +124,14 @@ class LaserPlotterTx:
 
     def home(self) -> bool:
         try:
+            self.send_gcode("$X", privileged=True)
             self.movement_history = []
-            self.send_gcode("G91", privileged=True)  # Setze relativen Modus
-                                                     #Previligierter Modus für potentielle homing out of bound commands
-            #Der String nmuss im uebrigen angepasst werden, je nach maschinengrenzen.. ich werde das noch umbauen.
+            self.set_mode(True)  # Setze RELATIVEN Modus für Homing
+
             # Home X-Achse
             self.send_gcode("G91 X10 F100", privileged=True)
             self.send_gcode("G91 X-370 F1000", privileged=True)
             self.send_gcode("G92 X0", privileged=True)
-            #Der Plotter kann leider keine befehlskette entgegen nehmen, deswegen Sleep, da dieser den befehl sonst ueberspringt
             time.sleep(5)
 
             # Home Y-Achse
@@ -149,9 +139,9 @@ class LaserPlotterTx:
             self.send_gcode("G91 Y-300 F1000", privileged=True)
             self.send_gcode("G92 Y0", privileged=True)
 
-            self.send_gcode("G90", privileged=True)  # Zurück in absoluten Modus
+            self.set_mode(False)  # Optional: Zurück zu ABSOLUT, falls gewünscht
 
-            self.status.current_x = 100 # Machste Hier den Ofsett rein für die düse lmao
+            self.status.current_x = 100  # Offset für die Düse
             self.status.current_y = 65
             self.status.is_homed = True
             return True
@@ -160,7 +150,7 @@ class LaserPlotterTx:
             return False
 
     def get_position_and_status(self) -> tuple:
-        return (self.status.current_x, self.status.current_y, str(self.status.coordinate_mode.name))
+        return (self.status.current_x, self.status.current_y, "RELATIVE" if self.status.is_relative_mode else "ABSOLUTE")
 
     def close_connection(self):
         if self.ser:
@@ -185,10 +175,5 @@ def lasercommander():
         print(f"Fehler: {e}")
         return None
 
-"""
 if __name__ == "__main__":
-    main()
-"""
-
-#Relativ komplex für das was es tuht :) F an die, die das hier lesen müssen... Gruss, Nitschke...
-
+    lasercommander()

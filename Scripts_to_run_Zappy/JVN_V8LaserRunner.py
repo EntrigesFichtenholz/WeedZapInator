@@ -172,7 +172,7 @@ def main():
 
                 # Zum Objekt fahren
                 unlock_machine()  # Entsperre vor der Bewegung
-                command_queue.put(f"G91 X{new_x} Y{new_y} F0")
+                command_queue.put(f"G91 X{new_x} Y{new_y} F100")
 
                 if pattenizer_activate:
                     print(f"Führe Pattern an Punkt {i} aus")
@@ -188,16 +188,18 @@ def main():
                         command_queue.put("pos")
                         x, y = position_queue.get()
                         print(f"Position nach Pattern-Befehl: X={x}, Y={y}")
-
+                
             except KeyboardInterrupt:
                 print("Programm wird beendet...")
                 stop_event.set()
                 break
 
+
     except Exception as e:
         print(f"Fehler: {e}")
         stop_event.set()
     finally:
+        time.sleep(3)
         print("Beende Programm...")
         stop_event.set()
         command_queue.put("exit")
@@ -205,3 +207,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+    

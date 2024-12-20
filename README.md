@@ -81,7 +81,7 @@ pip install numpy opencv-python torch ultralytics pyserial scikit-learn
 - `settings.txt`: Skalierungskalibrierung
 - Anpassbare Parameter in Detektions- und Plotter-Modulen
 - Konfigurations-Optionen für Mustergenerierung
-  (Noch nicht richtig Imprlementiert bzw. Teilweise verbuggt)
+  (Noch nicht richtig Implementiert bzw. teilweise verbuggt)
 
 
   """Das folgende ist ein Audiotranskript, welches ich auch ins Github schreibe:

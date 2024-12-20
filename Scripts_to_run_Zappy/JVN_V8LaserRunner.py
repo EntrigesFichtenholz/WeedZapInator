@@ -8,21 +8,18 @@ from sklearn.preprocessing import StandardScaler
 from JVN_V4LaserTx import lasercommander, LaserPlotterTx
 from JVN_V6detection_module import laseranalyst
 from JVN_V2patternizer import CirclePatternizer, SpiralPatternizer, GridPatternizer, RandomPatternizer
+from JVN_AutoScaleCalibre import calibrate
 from math import sqrt
 import keyboard
 
 def cluster_objects(found_objects, eps=0.5, min_samples=2):
     """
     Führt Clustering auf den Objekten durch, basierend auf ihren 2D-Koordinaten.
-    :param found_objects: Liste von Tupeln (class_name, cm_x, cm_y, confidence).
-    :param eps: Maximaler Abstand zwischen zwei Punkten, um sie in einem Cluster zu gruppieren.
-    :param min_samples: Minimale Anzahl von Punkten, um ein Cluster zu bilden.
-    :return: Liste von Mediantupeln (class_name, cm_x, cm_y, confidence) und Cluster-Labels.
     """
     if not found_objects:
         return [], []
 
-    coordinates = np.array([[obj[1], obj[2]] for obj in found_objects])  # cm_x, cm_y
+    coordinates = np.array([[obj[1], obj[2]] for obj in found_objects])
 
     clustering = DBSCAN(eps=eps, min_samples=min_samples).fit(coordinates)
 
@@ -52,8 +49,6 @@ def cluster_objects(found_objects, eps=0.5, min_samples=2):
 def find_optimal_path(coordinates):
     """
     Findet die effizienteste Reihenfolge der Punkte basierend auf der Distanz.
-    :param coordinates: Liste von Koordinaten [(x1, y1), (x2, y2), ...].
-    :return: Sortierte Liste der Koordinaten [(x1, y1), (x2, y2), ...].
     """
     if not coordinates:
         return []
@@ -63,7 +58,7 @@ def find_optimal_path(coordinates):
 
     sorted_path = []
     remaining_points = coordinates[:]
-    current_point = (0, 0)  # Startpunkt (Nullpunkt)
+    current_point = (0, 0)
 
     while remaining_points:
         next_point = min(remaining_points, key=lambda p: distance(current_point, p))
@@ -97,6 +92,17 @@ def plotter_thread(plotter, command_queue, position_queue, stop_event):
         print("Plotter-Thread wurde beendet.")
 
 def main():
+    # Derzeit Noch nicht richtig implementeirt 
+    # Einstellungen für den Patternizer
+    pattenizer_activate = False
+    circle_pattern = CirclePatternizer(
+        radius=0.5,
+        radius_step=0.5,
+        steps=12
+    )
+    
+    patternizer_commands = circle_pattern.generate_gcode()
+    
     enable_clustering = input("Clustering aktivieren? (y/n): ").strip().lower() == 'y'
 
     print("Starte Laser Commander...")
@@ -105,6 +111,7 @@ def main():
         print("Verbindung zum Laserplotter konnte nicht hergestellt werden.")
         return
 
+    plotter.set_mode("RELATIVE")
     command_queue = queue.Queue()
     stop_event = threading.Event()
     position_queue = queue.Queue()
@@ -112,12 +119,20 @@ def main():
     thread = threading.Thread(target=plotter_thread, args=(plotter, command_queue, position_queue, stop_event))
     thread.start()
     time.sleep(10)
+    
+    def unlock_machine():
+        """Hilfsfunktion zum Entsperren der Maschine"""
+        command_queue.put("$X")  # Entsperrt die Maschine
+    
+    unlock_machine() #Sollte bugs vorbeugen
 
+    # Initiale Position
     command_queue.put("pos")
     x, y = position_queue.get()
     print(f"XYPOS: X={x}, Y={y}")
     time.sleep(3)
 
+    # Objekte erkennen
     attempts = 0
     max_attempts = 5
     while attempts < max_attempts:
@@ -132,7 +147,7 @@ def main():
         return
     else:
         print("Objekte erkannt!")
-
+    
     try:
         if enable_clustering:
             median_tuples, labels = cluster_objects(found_objects, eps=0.1, min_samples=2)
@@ -145,24 +160,48 @@ def main():
 
         print("Optimierter Pfad:")
         for i, (x_mm, y_mm) in enumerate(optimal_path, 1):
-            print(f"Punkt {i}: X={x_mm}, Y={y_mm}")
-
-            command_queue.put("pos")
-            current_x, current_y = position_queue.get()
-
-            new_x = round((x_mm - current_x), 2)
-            new_y = round((y_mm - current_y), 2)
-            print(f"Command: X={new_x}, Y={new_y}")
-
             try:
+                # Position abfragen
+                command_queue.put("pos")
+                current_x, current_y = position_queue.get()
+
+                # Neue Position berechnen
+                new_x = round((x_mm - current_x), 2)
+                new_y = round((y_mm - current_y), 2)
+                print(f"Punkt {i}: Fahre zu X={x_mm}, Y={y_mm}")
+
+                # Zum Objekt fahren
+                unlock_machine()  # Entsperre vor der Bewegung
                 command_queue.put(f"G91 X{new_x} Y{new_y} F0")
+
+                if pattenizer_activate:
+                    print(f"Führe Pattern an Punkt {i} aus")
+                    unlock_machine()  # Entsperre vor dem Pattern
+                    
+                    # Pattern-Befehle einzeln senden
+                    for command in patternizer_commands:
+                        unlock_machine()  # Entsperre vor jedem Pattern-Befehl
+                        command_queue.put(f"G91 {command}")  # Einzelner Befehl
+                        time.sleep(0.1)  # Wartezeit zwischen Befehlen
+                        
+                        # Prüfe Position nach jedem Befehl
+                        command_queue.put("pos")
+                        x, y = position_queue.get()
+                        print(f"Position nach Pattern-Befehl: X={x}, Y={y}")
+
             except KeyboardInterrupt:
                 print("Programm wird beendet...")
                 stop_event.set()
-            time.sleep(0.5)
+                break
 
     except Exception as e:
         print(f"Fehler: {e}")
+        stop_event.set()
+    finally:
+        print("Beende Programm...")
+        stop_event.set()
+        command_queue.put("exit")
+        thread.join()
 
 if __name__ == "__main__":
     main()

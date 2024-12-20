@@ -28,9 +28,11 @@ pip install numpy opencv-python torch ultralytics pyserial scikit-learn
 
 ## Systemarchitektur
 -Sie Benötigen dringend ein Linux basierendes System wegen dem Frabebuffer! fb0 muss FullHD sein!
+
 -Sie müssen zudem die richtigen Pfade festlegen.. Z.B. für den ESP32 des Plotters sudo ls /dev/serial/by-id/*
  den ausgegebenen Pfad dann in LaserTx übernehmen
--Achten Sie darauf, dass Sie den richtigen Pad für die Kammera im detection Script festlegen
+
+-Achten Sie darauf, dass Sie den richtigen Pad für die Kammera im detection Script festlegen. Z.B. /dev/video0 oder video1
 
 ### Modulübersicht
 
@@ -93,7 +95,7 @@ pip install numpy opencv-python torch ultralytics pyserial scikit-learn
 
 ## Hardwareanforderungen
 - USB-Verbindung zum Laser-Plotter
-- Kalibrierte Kamera
+- UUSB Kamera
 - CUDA-kompatible GPU (empfohlen)
 
 ## Sicherheit und Einschränkungen

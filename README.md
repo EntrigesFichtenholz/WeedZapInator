@@ -27,7 +27,11 @@ pip install numpy opencv-python torch ultralytics pyserial scikit-learn
 ```
 
 ## Systemarchitektur
-Sie Benötigen dringend ein Linux basierendes System wegen dem Frabebuffer! fb0 muss FullHD sein!
+-Sie Benötigen dringend ein Linux basierendes System wegen dem Frabebuffer! fb0 muss FullHD sein!
+-Sie müssen zudem die richtigen Pfade festlegen.. Z.B. für den ESP32 des Plotters sudo ls /dev/serial/by-id/*
+ den ausgegebenen Pfad dann in LaserTx übernehmen
+-Achten Sie darauf, dass Sie den richtigen Pad für die Kammera im detection Script festlegen
+
 ### Modulübersicht
 
 1. **Detektionsmodul (`JVN_V6detection_module.py`)**

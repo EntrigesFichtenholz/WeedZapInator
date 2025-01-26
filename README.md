@@ -127,6 +127,3 @@ pip install numpy opencv-python torch ultralytics pyserial scikit-learn
 - Dynamische Mustergenerierung
 - Erweiterte Clustering-Algorithmen
 - Erhöhte Maschinenkompatibilität
-
-## Entwickler
-Johannes Nitschke - Projektleiter

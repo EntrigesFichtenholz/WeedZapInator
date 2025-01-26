@@ -1,4 +1,4 @@
-🔴 **Benutzen Sie das Gerät verantwortungsvoll! Der Code kann Bugs enthalten, welche unerwünschtes Fehlverhalten hervorrufen können. Genießen/Benutzen Sie ihn mit Vorsicht und seien Sie sich sicher, dass Sie die nötigen Schutzmaßnahmen einhalten!** 🔴
+<font color="red"> **Benutzen Sie das Gerät verantwortungsvoll! Der Code kann Bugs enthalten, welche unerwünschtes Fehlverhalten hervorrufen können. Genießen/Benutzen Sie ihn mit Vorsicht und seien Sie sich sicher, dass Sie die nötigen Schutzmaßnahmen einhalten!** </>
 
 Use the device responsibly! The code may contain bugs that can cause undesirable behavior. Use it with caution, and at your own risk!
 

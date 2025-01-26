@@ -20,8 +20,9 @@ def load_settings():
     if os.path.exists(SETTINGS_FILE):
         with open(SETTINGS_FILE, "r") as file:
             return json.load(file)
+    #Passt die Skalierung an um die Schrittweite und Dimension anzupassen!!!
     return {"scale_x": 34.08, "scale_y": 24.00}  # Default values
-
+    
 def save_settings(settings):
     with open(SETTINGS_FILE, "w") as file:
         json.dump(settings, file)

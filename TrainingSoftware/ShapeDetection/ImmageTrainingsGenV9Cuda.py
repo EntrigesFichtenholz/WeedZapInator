@@ -1,3 +1,4 @@
+#Dieses Programm ist Broken ;(
 import os
 import cv2
 import random
